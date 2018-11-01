@@ -2,7 +2,7 @@ import { ModuleMetadata, Type } from '@nestjs/common/interfaces';
 
 export interface OnsModuleOptions {
   httpclient: any;
-  // logger?:any,
+  logger?: any;
   // isBroadcast?:boolean,
   accessKeyId: string;
   accessKeySecret: string;
