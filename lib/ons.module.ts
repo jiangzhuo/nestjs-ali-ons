@@ -1,41 +1,41 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
-import {
-  createOnsConsumerClient,
-  createOnsProducerClient
-} from './ons-client.provider';
+import { createOnsClients } from './ons-client.provider';
 import { ONS_MODULE_OPTIONS } from './ons.constants';
-import { OnsService } from './ons.service';
 import {
   OnsModuleAsyncOptions,
   OnsModuleOptions,
   OnsOptionsFactory
 } from './interfaces/ons-module-options.interface';
 
-@Module({
-  providers: [OnsService],
-  exports: [OnsService]
-})
+@Module({})
 export class OnsModule {
-  static register(options: OnsModuleOptions): DynamicModule {
+  static register(
+    options: OnsModuleOptions,
+    configs: { topic: string; tags: string }[]
+  ): DynamicModule {
+    const onsClients = createOnsClients(configs);
+    const providers = onsClients.concat({
+      provide: ONS_MODULE_OPTIONS,
+      useValue: options
+    });
     return {
       module: OnsModule,
-      providers: [
-        createOnsConsumerClient(),
-        createOnsProducerClient(),
-        { provide: ONS_MODULE_OPTIONS, useValue: options }
-      ]
+      providers: providers,
+      exports: providers
     };
   }
 
-  static registerAsync(options: OnsModuleAsyncOptions): DynamicModule {
+  static registerAsync(
+    options: OnsModuleAsyncOptions,
+    configs: { topic: string; tags: string }[]
+  ): DynamicModule {
+    const onsClients = createOnsClients(configs);
+    const providers = onsClients.concat(this.createAsyncProviders(options));
     return {
       module: OnsModule,
       imports: options.imports || [],
-      providers: [
-        createOnsConsumerClient(),
-        createOnsProducerClient(),
-        ...this.createAsyncProviders(options)
-      ]
+      providers: onsClients.concat(this.createAsyncProviders(options)),
+      exports: providers
     };
   }
 

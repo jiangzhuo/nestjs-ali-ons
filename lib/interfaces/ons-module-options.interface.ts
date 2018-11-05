@@ -6,8 +6,8 @@ export interface OnsModuleOptions {
   // isBroadcast?:boolean,
   accessKeyId: string;
   accessKeySecret: string;
-  producerGroup: string;
-  consumerGroup: string;
+  producerGroup?: string;
+  consumerGroup?: string;
   // onsAddr?: string
 }
 

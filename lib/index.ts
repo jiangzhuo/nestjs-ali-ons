@@ -1,3 +1,3 @@
-export * from './ons.module';
-export * from './ons.service';
+export * from './common';
 export * from './interfaces';
+export * from './ons.module';
