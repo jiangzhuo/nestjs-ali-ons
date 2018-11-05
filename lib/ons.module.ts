@@ -4,14 +4,15 @@ import { ONS_MODULE_OPTIONS } from './ons.constants';
 import {
   OnsModuleAsyncOptions,
   OnsModuleOptions,
-  OnsOptionsFactory
+  OnsOptionsFactory,
+  OnsModuleConfigs
 } from './interfaces/ons-module-options.interface';
 
 @Module({})
 export class OnsModule {
   static register(
     options: OnsModuleOptions,
-    configs: { topic: string; tags: string }[]
+    configs: OnsModuleConfigs[]
   ): DynamicModule {
     const onsClients = createOnsClients(configs);
     const providers = onsClients.concat({
@@ -27,7 +28,7 @@ export class OnsModule {
 
   static registerAsync(
     options: OnsModuleAsyncOptions,
-    configs: { topic: string; tags: string }[]
+    configs: OnsModuleConfigs[]
   ): DynamicModule {
     const onsClients = createOnsClients(configs);
     const providers = onsClients.concat(this.createAsyncProviders(options));

@@ -11,6 +11,12 @@ export interface OnsModuleOptions {
   // onsAddr?: string
 }
 
+export interface OnsModuleConfigs {
+  topic: string;
+  tags: string;
+  type: 'producer' | 'consumer';
+}
+
 export interface OnsOptionsFactory {
   createOnsOptions(): Promise<OnsModuleOptions> | OnsModuleOptions;
 }
