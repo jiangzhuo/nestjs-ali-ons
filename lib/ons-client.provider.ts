@@ -5,6 +5,7 @@ import { getConsumerToken, getProducerToken } from './common/ons.utils';
 
 export const createOnsClients = (configs: OnsModuleConfigs[]): any[] => {
   let clients = [];
+  let producer;
   configs.forEach(config => {
     if (config.type === 'consumer') {
       clients.push({
@@ -34,7 +35,9 @@ export const createOnsClients = (configs: OnsModuleConfigs[]): any[] => {
       clients.push({
         provide: getProducerToken(config.topic, config.tags),
         useFactory: (options: OnsModuleOptions) => {
-          let producer = new Producer(options);
+          if (!producer) {
+            producer = new Producer(options);
+          }
           return new Proxy(producer, {
             get(target: any, p: PropertyKey, receiver: any): any {
               if (p === 'send') {
